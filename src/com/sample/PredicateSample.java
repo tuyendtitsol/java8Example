@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static java.util.logging.Level.INFO;
+
 public class PredicateSample {
+
+    private static Logger logger;
 
     public static <T> List<T> filter(List<T> list, Predicate<T> p) {
         List<T> results = new ArrayList<>();
@@ -20,59 +25,41 @@ public class PredicateSample {
 
     public static void main(String[] args) {
         List<String> listOfStrings = Arrays.asList("A", "B", "", "C", "");
-        Predicate<String> nonEmptyStringPredicate = (String s) -> !s.isEmpty();
-        List<String> nonEmpty = filter(listOfStrings, nonEmptyStringPredicate);
-        System.out.println(nonEmpty.size());
-
-        // 1. predicate in filter()
-        // filter() accepts predicate as argument.
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        List<Integer> collect = list.stream().filter(x -> x>5).collect(Collectors.toList());
-        System.out.println("Filter using lambda:" + collect);
-        Predicate<Integer> noGreaterThan5 =  x -> x > 5;
-        List<Integer> collect1 = list.stream()
-                .filter(noGreaterThan5)
-                .collect(Collectors.toList());
-        System.out.println("Filter using predicate: " + collect1); // [6, 7, 8, 9, 10]
+        List<String> listString = Arrays.asList("A", "AA", "AAA", "B", "BB", "BBB");
 
-
-        // 2.Predicate.and()
-        // Multiple filters.
-        List<Integer> collect3 = list.stream()
-                .filter(x -> x > 5 && x < 8).collect(Collectors.toList());
-        System.out.println("Multiple filters using lambda:" + collect3);
-
-        Predicate<Integer> noLessThan8 = x -> x < 8;
-        List<Integer> collect4 = list.stream()
-                .filter(noGreaterThan5.and(noLessThan8))
-                .collect(Collectors.toList());
-        System.out.println("Multiple filters using predicate: " + collect4);
-
-        // Predicate.or()
         Predicate<String> lengthIs3 = x -> x.length() == 3;
         Predicate<String> startWithA = x -> x.startsWith("A");
-        List<String> listString = Arrays.asList("A", "AA", "AAA", "B", "BB", "BBB");
-        List<String> collect5 = listString.stream()
-                .filter(lengthIs3.or(startWithA))
-                .collect(Collectors.toList());
-        System.out.println("Multiple filters using predicate.or:" + collect5);
+        Predicate<Integer> noGreaterThan5 =  x -> x > 5;
+        Predicate<Integer> noLessThan8 = x -> x < 8;
+        Predicate<String> nonEmptyStringPredicate = (String s) -> !s.isEmpty();
+
+        List<String> nonEmpty = filter(listOfStrings, nonEmptyStringPredicate);
+        logger.info(nonEmpty.size() + "");
+
+        // 1. predicate in filter()
+        predicateInFilter(list, noGreaterThan5);
+
+        // 2. Predicate.and()
+        predicateAndMethod(list, noGreaterThan5, noLessThan8);
+
+        // 3. Predicate.or()
+        predicateOrMethod(listString, lengthIs3, startWithA);
 
         // 4. Predicate.negate()
-        // Find all elements not start with ‘A’.
-        List<String> collect6 = listString.stream()
-                .filter(startWithA.negate())
-                .collect(Collectors.toList());
-        System.out.println("Filter using predicate.negate() " + collect6);
+        predicateNegateMethod(listString, startWithA);
 
         // 5. Predicate.test() in function
-        // Predicate in function.
-        System.out.println(StringProcessor.filter(
-                listString, x -> x.startsWith("A")));                    // [A, AA, AAA]
-
-        System.out.println(StringProcessor.filter(
-                listString, x -> x.startsWith("A") && x.length() == 3)); // [AAA]
+        predicateInFunction(listString);
 
         // 6. Predicate Chaining
+        predicateChaining(startWithA);
+
+        // 7. Predicate in Object
+        predicateInObject();
+    }
+
+    private static void predicateChaining(Predicate<String> startWithA) {
         // We can chain predicates together.
         // start with "A" or "m"
         boolean result = startWithA.or(x -> x.startsWith("m")).test("mkyong");
@@ -81,9 +68,53 @@ public class PredicateSample {
         // !(start with "A" and length is 3)
         boolean result2 = startWithA.and(x -> x.length() == 3).negate().test("Abc");
         System.out.println(result2);
+    }
 
-        // 7. Predicate in Object
-        predicateInObject();
+    private static void predicateInFunction(List<String> listString) {
+        // Predicate in function.
+        System.out.println(StringProcessor.filter(
+                listString, x -> x.startsWith("A")));                    // [A, AA, AAA]
+
+        System.out.println(StringProcessor.filter(
+                listString, x -> x.startsWith("A") && x.length() == 3)); // [AAA]
+    }
+
+    private static void predicateNegateMethod(List<String> listString, Predicate<String> startWithA) {
+        // Find all elements not start with ‘A’.
+        List<String> collect6 = listString.stream()
+                .filter(startWithA.negate())
+                .collect(Collectors.toList());
+        System.out.println("Filter using predicate.negate() " + collect6);
+    }
+
+    private static void predicateOrMethod(List<String> listString, Predicate<String> lengthIs3, Predicate<String> startWithA) {
+        List<String> collect5 = listString.stream()
+                .filter(lengthIs3.or(startWithA))
+                .collect(Collectors.toList());
+        System.out.println("Multiple filters using predicate.or:" + collect5);
+    }
+
+    private static void predicateAndMethod(List<Integer> list, Predicate<Integer> noGreaterThan5, Predicate<Integer> noLessThan8) {
+        // Multiple filters.
+        List<Integer> collect3 = list.stream()
+                .filter(x -> x > 5 && x < 8).collect(Collectors.toList());
+        System.out.println("Multiple filters using lambda:" + collect3);
+
+        List<Integer> collect4 = list.stream()
+                .filter(noGreaterThan5.and(noLessThan8))
+                .collect(Collectors.toList());
+        System.out.println("Multiple filters using predicate: " + collect4);
+    }
+
+    private static void predicateInFilter(List<Integer> list, Predicate<Integer> noGreaterThan5) {
+        // filter() accepts predicate as argument.
+        List<Integer> collect = list.stream().filter(x -> x>5).collect(Collectors.toList());
+        logger.log(INFO, "Filter using lambda: {}", collect);
+
+        collect = list.stream()
+                .filter(noGreaterThan5)
+                .collect(Collectors.toList());
+        System.out.println("Filter using predicate: " + collect); // [6, 7, 8, 9, 10]
     }
 
     private static void predicateInObject() {
