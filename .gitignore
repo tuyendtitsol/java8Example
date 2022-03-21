@@ -12,3 +12,5 @@
 /target/classes/com/sample/StringProcessor.class
 /target/classes/com/sample/Main.class
 /target/classes/com/sample/Student.class
+/.idea/jarRepositories.xml
+/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_12_0.xml
