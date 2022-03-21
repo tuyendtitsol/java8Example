@@ -1,1 +1,14 @@
-/out
+/out/
+/target/classes/com/sample/ConsumerSample.class
+/target/classes/com/sample/FunctionSample.class
+/target/classes/com/sample/Hosting.class
+/target/classes/com/sample/HostingRepository.class
+/target/classes/com/sample/MeaningOfThis$1.class
+/target/classes/com/sample/MeaningOfThis.class
+/target/classes/com/sample/MethodReferenceSample.class
+/target/classes/com/sample/PredicateSample.class
+/target/classes/com/sample/ReadingFile$BufferedReaderProcessor.class
+/target/classes/com/sample/ReadingFile.class
+/target/classes/com/sample/StringProcessor.class
+/target/classes/com/sample/Main.class
+/target/classes/com/sample/Student.class
