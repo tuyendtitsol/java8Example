@@ -1,10 +1,11 @@
-package com.sample;
+package com.sample.methodreference;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -17,6 +18,9 @@ public class MethodReferenceSample {
 
     public static void main(String[] args) {
         referenceStaticMethod();
+        List<String> str = Arrays.asList("a","b","A","B");
+        str.sort(String::compareToIgnoreCase);
+        BiPredicate<List<String>, String> contains = List::contains;
     }
 
     private static void referenceStaticMethod() {

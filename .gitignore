@@ -1,4 +1,5 @@
 /out/
+/target/
 /target/classes/com/sample/ConsumerSample.class
 /target/classes/com/sample/FunctionSample.class
 /target/classes/com/sample/Hosting.class
@@ -14,3 +15,8 @@
 /target/classes/com/sample/Student.class
 /.idea/jarRepositories.xml
 /.idea/libraries/Maven__org_apache_commons_commons_lang3_3_12_0.xml
+/target/core-java-lambdas-0.1.0-SNAPSHOT.jar
+/target/classes/com/sample/methodreference/Main.class
+/target/classes/com/sample/methodreference/MethodReferenceSample.class
+/target/maven-archiver/pom.properties
+/target/classes/com/sample/methodreference/Student.class
