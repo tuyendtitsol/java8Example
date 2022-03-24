@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -39,6 +40,11 @@ public class Main {
         Student s2 = c2.apply("vinci");
         runnable = () -> System.out.println(s2);
         runnable.run();
+
+        // with parameters. Using BiFunction class and apply() method
+        BiFunction<Integer, String, Student> c3 =
+                Student::new;
+        Student s3 = c3.apply(1, "Anna");
     }
 
     private static void raiseStudents(List<Student> employees,
@@ -61,6 +67,11 @@ class Student {
     public String name;
 
     public Student(String name) {
+        this.name = name;
+    }
+
+    public Student(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
